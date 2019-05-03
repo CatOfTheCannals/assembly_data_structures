@@ -3,6 +3,7 @@ section .data ;erase
     nullStr db 'NULL', 0
     leftSquareBracket db '[', 0
     rightSquareBracket db ']', 0
+    percentS db '%s', 0
     comma db ',', 0
     eqNode db 'eqNode ',0
 section .rodata
@@ -43,31 +44,17 @@ doNothing:
     ret
 
 strLen:
-; preserves rdi, returns len in rax
+    mov rax, 0x0
 
-    push rbp ; push old stack base
-    mov rbp, rsp ; set stack base to current stack top
-    push rbx
-    add rsp, 8
-
-    mov rax, 0
-    mov rbx, rdi
-
-    .iterateString:
-        cmp byte [rbx], 0
-        jne .count
-        jmp .end 
-
-    .count:
-        add rbx, 1
-        add eax, 1 
-        jmp .iterateString
+    .loop:
+        cmp byte [rdi + rax], 0x0
+        je .end
+        inc rax
+        jmp .loop
 
     .end:
-        sub rsp, 8
-        pop rbx;
-        pop rbp ; reset stack base to prev stack
         ret
+    
 
 strClone:
     push rbp
@@ -253,7 +240,7 @@ strPrint:
     push r12
     push rbx
 
-    mov rbx, rdi ; rdx will contain a
+    mov rbx, rdi ; rbx will contain a
     mov r12, rsi ; r12 will contain pfile
 
     call strLen ; eax now contains size of input string
@@ -266,7 +253,8 @@ strPrint:
 
     .end:
         mov rdi, r12 ; pfile is first argument
-        mov rsi, rbx ; second argument is what we want to print
+        mov rsi, percentS
+        mov rdx, rbx ; third argument is what we want to print
         call fprintf
 
         pop rbx

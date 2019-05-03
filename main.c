@@ -23,13 +23,12 @@ void test_3();
 
 int main() {
     srand(12345);
-
     remove(filename_1);
     test_1();
     remove(filename_2);
     test_2();
     remove(filename_3);
-    test_3();
+    // test_3();
 
     return 0;
 }
@@ -338,7 +337,7 @@ void test_n3Tree(FILE *pfile) {
         n3treeAdd(t, stringsLocal[i],(funcCmp_t*)&strCmp);
     n3treePrint(t,pfile,(funcPrint_t*)&strPrint);
     for(int i=10; i<20;i++)
-        // n3treeAdd(t, stringsLocal[i],(funcCmp_t*)&strCmp);
+        n3treeAdd(t, stringsLocal[i],(funcCmp_t*)&strCmp);
     n3treePrint(t,pfile,(funcPrint_t*)&strPrint);
     n3treeRemoveEq(t,0);
     n3treePrint(t,pfile,(funcPrint_t*)&strPrint);
